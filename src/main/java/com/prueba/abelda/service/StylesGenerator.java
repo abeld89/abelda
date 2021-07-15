@@ -13,18 +13,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class StylesGenerator {
 
-  public Map prepareStyles(Workbook wb) {
+  public Map<ExcelStyle, CellStyle> prepareStyles(Workbook wb) {
     Font boldArial = this.createBoldArialFont(wb);
     Font redBoldArial = this.createRedBoldArialFont(wb);
     CellStyle rightAlignedStyle = this.createRightAlignedStyle(wb);
     CellStyle greyCenteredBoldArialWithBorderStyle = this.createGreyCenteredBoldArialWithBorderStyle(wb, boldArial);
     CellStyle redBoldArialWithBorderStyle = this.createRedBoldArialWithBorderStyle(wb, redBoldArial);
     CellStyle rightAlignedDateFormatStyle = this.createRightAlignedDateFormatStyle(wb);
-    Map excelMap = new HashMap();
+    Map<ExcelStyle, CellStyle> excelMap = new HashMap();
     excelMap.put(ExcelStyle.RIGHT_ALIGNED, rightAlignedStyle);
     excelMap.put(ExcelStyle.GREY_CENTERED_BOLD_ARIAL_WITH_BORDER, greyCenteredBoldArialWithBorderStyle);
-    excelMap.put(ExcelStyle.RED_BOLD_ARIAL_WITH_BORDER, redBoldArialWithBorderStyle);
-    excelMap.put(ExcelStyle.RIGHT_ALIGNED_DATE_FORMAT, rightAlignedDateFormatStyle);
     return excelMap;
   }
 
