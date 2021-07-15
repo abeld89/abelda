@@ -1,0 +1,91 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.prueba'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	mapstruct
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	javaLanguageLevel = '1.6'
+	generatedMapperSourcesDir = "${buildDir}/generated-src/mapstruct/main"
+	mapstructVersion = "1.4.2.Final"
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'junit:junit:4.12'
+    compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	testImplementation 'org.mockito:mockito-core:3.11.2'
+	testImplementation 'org.junit.platform:junit-platform-engine:+'
+	implementation("org.apache.poi:poi:4.1.2")
+	implementation("org.apache.poi:poi-ooxml:4.1.2")
+}
+
+sourceSets.main {
+	ext.originalJavaSrcDirs = java.srcDirs
+}
+
+test {
+	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs = [
+			'-Amapstruct.suppressGeneratorTimestamp=true',
+			'-Amapstruct.defaultComponentModel=spring'
+	]
+}
+
+task generateMainMapperClasses(type: JavaCompile) {
+	classpath = compileJava.classpath + configurations.mapstruct
+	source = sourceSets.main.originalJavaSrcDirs
+	ext.sourceDestDir = file ( "$generatedMapperSourcesDir" )
+
+	options.define(
+			compilerArgs: [
+					"-nowarn",
+					"-proc:only",
+					"-encoding", "UTF-8",
+					"-processor", "org.mapstruct.ap.MappingProcessor",
+					"-s", file("$generatedMapperSourcesDir").absolutePath,
+					"-source", rootProject.javaLanguageLevel,
+					"-target", rootProject.javaLanguageLevel,
+			]
+	);
+
+	inputs.dir source
+	outputs.dir generatedMapperSourcesDir;
+	doFirst {
+		file("$generatedMapperSourcesDir").mkdirs()
+	}
+	doLast {
+		file("${buildDir}/tmp/apt/mapstruct").delete()
+	}
+}
