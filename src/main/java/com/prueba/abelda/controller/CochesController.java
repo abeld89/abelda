@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("coche")
+@RequestMapping("coches")
 public class CochesController {
 
   private final ReportApiRepository apiRepository;
