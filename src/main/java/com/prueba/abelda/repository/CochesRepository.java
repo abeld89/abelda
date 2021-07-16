@@ -17,8 +17,5 @@ public interface CochesRepository extends CrudRepository<Coche, Long> {
       + "AND m.id = c.marca.id "
       + "AND (p.fechaInicio < :fecha AND p.fechaFin > :fecha)")
   Optional<Coche> findByIdAndDate(@Param("id") Long id, @Param("fecha") LocalDate fecha);
-//
-//  @Query("SELECT m.coches FROM Marca m"
-//      + "WHERE m = :marca")
-//  List<Coche> findByMarca(@Param("marca") String marca);
+
 }

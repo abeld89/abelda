@@ -1,7 +1,6 @@
 package com.prueba.abelda.mapper;
 
 import com.prueba.abelda.dto.CocheDto;
-import com.prueba.abelda.dto.CocheRequestDto;
 import com.prueba.abelda.model.Coche;
 import java.util.List;
 import org.mapstruct.CollectionMappingStrategy;
@@ -20,7 +19,5 @@ public interface CochesMapper {
   CocheDto toDto(Coche coche);
 
   List<CocheDto> toDtoList(List<Coche> coches);
-
-  Coche toEntity(CocheRequestDto cocheRequest);
 
 }

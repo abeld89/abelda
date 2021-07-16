@@ -1,12 +1,12 @@
 package com.prueba.abelda.service.impl;
 
 import com.prueba.abelda.dto.CocheDto;
-import com.prueba.abelda.dto.CocheRequestDto;
 import com.prueba.abelda.mapper.CochesMapper;
 import com.prueba.abelda.model.Coche;
 import com.prueba.abelda.repository.CochesRepository;
 import com.prueba.abelda.repository.MarcasRepository;
 import com.prueba.abelda.service.CochesService;
+import com.prueba.abelda.util.CocheExcelExporter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +25,12 @@ public class CochesServiceImpl implements CochesService {
   private final MarcasRepository marcasRepository;
 
   @Override
-  public CocheDto add(CocheRequestDto request) {
-    final Coche coche = cochesRepository.save(mapper.toEntity(request));
-    return mapper.toDto(coche);
-  }
-
-  @Override
-  public List<Coche> getAll() {
+  public CocheExcelExporter getAll() {
     List<Coche> cochesList = new ArrayList<>();
     cochesRepository.findAll()
         .iterator()
         .forEachRemaining(cochesList::add);
-    return cochesList;
+    return new CocheExcelExporter(cochesList);
   }
 
   @Override
